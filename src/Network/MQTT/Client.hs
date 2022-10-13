@@ -312,7 +312,7 @@ runMQTTConduit mkconn MQTTConfig{..} = do
   pure cli
 
   where
-    clientThread cli = mkconn (\ad -> (E.bracket (start cli ad) markDisco (run ad)))
+    clientThread cli = mkconn (\ad -> (E.bracket (start cli ad) (\_ -> markDisco) (run ad)))
       where
         _connectAndRun = mkconn $ \ad -> start cli ad >>= run ad
         markDisco = atomically $ do
